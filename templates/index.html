@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishimitra - Crop Price Prediction</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f7ef;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px #0002;
+        }
+
+        h1 {
+            color: #26733a;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 25px;
+            background: #26733a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #19572a;
+        }
+
+        .result {
+            background: #e5f5e7;
+            padding: 18px;
+            margin-top: 20px;
+            text-align: center;
+            border-radius: 8px;
+            color: #19572a;
+        }
+
+        .error {
+            color: #b42318;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌱 Krishimitra</h1>
+
+    <p>Assured Contract Farming System for Stable Market Access</p>
+
+    <h2>Crop Price Prediction</h2>
+
+    <form action="/predict" method="POST">
+
+        <label>State</label>
+<select name="state" required>
+    <option value="">Select State</option>
+    {% for state in states %}
+    <option value="{{ state }}">{{ state }}</option>
+    {% endfor %}
+</select>
+
+        
+<label>District</label>
+<select name="district" id="district" required>
+    <option value="">Select District</option>
+
+    {% for district in districts %}
+    <option value="{{ district }}">{{ district }}</option>
+    {% endfor %}
+</select>
+        
+<label>Market</label>
+<select name="market" id="market" required>
+    <option value="">Select Market</option>
+
+    {% for market in markets %}
+    <option value="{{ market }}">{{ market }}</option>
+    {% endfor %}
+
+</select>
+
+
+        
+<label>Commodity / Crop</label>
+<select name="commodity" required>
+    <option value="">Select Crop</option>
+
+    {% for commodity in commodities %}
+    <option value="{{ commodity }}">{{ commodity }}</option>
+    {% endfor %}
+
+</select>
+
+        
+<label>Variety</label>
+<select name="variety" required>
+    <option value="">Select Variety</option>
+
+    {% for variety in varieties %}
+    <option value="{{ variety }}">{{ variety }}</option>
+    {% endfor %}
+
+</select>
+
+
+        
+<label>Grade</label>
+<select name="grade" required>
+    <option value="">Select Grade</option>
+
+    {% for grade in grades %}
+    <option value="{{ grade }}">{{ grade }}</option>
+    {% endfor %}
+
+</select>
+
+
+        <label>Season</label>
+        <select name="season" required>
+            <option value="">Select Season</option>
+            <option value="Monsoon">Monsoon</option>
+            <option value="Winter">Winter</option>
+            <option value="Summer">Summer</option>
+            <option value="Post-Monsoon">Post-Monsoon</option>
+        </select>
+
+        <label>Future Date</label>
+        <input type="date" name="future_date" required>
+
+        <button type="submit">Predict Crop Price</button>
+
+    </form>
+
+     
+     {% if prediction is defined %}
+     <div class="result">
+    <h2>🌱 Crop Price Prediction Result</h2>
+
+    <p><strong>Crop:</strong> {{ crop }}</p>
+
+    <p><strong>Market:</strong> {{ market }}</p>
+
+    <p><strong>Prediction Date:</strong> {{ prediction_date }}</p>
+
+    <h1>₹ {{ prediction }}</h1>
+
+    <p>Estimated Crop Price per Quintal</p>
+
+    <p>
+        Note: This is an ML-generated estimate,
+        not a guaranteed market or contract price.
+    </p>
+</div>
+{% endif %}
+   
+
+    {% if error %}
+    <div class="error">
+        Error: {{ error }}
+    </div>
+    {% endif %}
+
+</div>
+<script type="application/json" id="district-data">
+    {{ district_map | tojson }}
+</script>
+<script type="application/json" id="market-data">
+    {{ market_map | tojson }}
+</script>
+<script>
+const districtMap = JSON.parse(
+    document.getElementById("district-data").textContent
+);
+const marketMap = JSON.parse(
+    document.getElementById("market-data").textContent
+);
+
+const stateSelect = document.querySelector(
+    'select[name="state"]'
+);
+
+const districtSelect = document.querySelector(
+    'select[name="district"]'
+);
+const marketSelect = document.querySelector(
+    'select[name="market"]'
+);
+
+stateSelect.addEventListener("change", function () {
+    const selectedState = this.value;
+
+    districtSelect.innerHTML =
+        '<option value="">Select District</option>';
+
+    const districts = districtMap[selectedState] || [];
+
+    districts.forEach(function (district) {
+        const option = document.createElement("option");
+        option.value = district;
+        option.textContent = district;
+        districtSelect.appendChild(option);
+    });
+});
+districtSelect.addEventListener("change", function () {
+    const selectedDistrict = this.value;
+
+    marketSelect.innerHTML =
+        '<option value="">Select Market</option>';
+
+    const markets = marketMap[selectedDistrict] || [];
+
+    markets.forEach(function (market) {
+        const option = document.createElement("option");
+        option.value = market;
+        option.textContent = market;
+        marketSelect.appendChild(option);
+    });
+});
+</script>
+</body>
+</html>

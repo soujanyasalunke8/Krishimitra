@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Farmer Registration - Krishimitra</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f7f0;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #ccc;
+        }
+
+        h1 {
+            text-align: center;
+            color: #237a3b;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            background: #237a3b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #185b2b;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>🌱 Krishimitra</h1>
+    <h2>Farmer Registration</h2>
+
+    <form action="/register_farmer" method="POST">
+
+        <label>Farmer Name</label>
+        <input type="text" name="name"
+               placeholder="Enter your full name" required>
+
+        <label>Mobile Number</label>
+        <input type="tel" name="phone"
+               placeholder="Enter mobile number"
+               pattern="[0-9]{10}" required>
+
+        <label>Village</label>
+        <input type="text" name="village"
+               placeholder="Enter village name" required>
+
+        <label>State</label>
+        <input type="text" name="state"
+               placeholder="Enter state" required>
+
+        <label>District</label>
+        <input type="text" name="district"
+               placeholder="Enter district" required>
+
+        <label>Crop Grown</label>
+        <input type="text" name="crop"
+               placeholder="Enter crop name" required>
+
+        <button type="submit">Register Farmer</button>
+
+    </form>
+
+</div>
+</body>
+</html>
